@@ -12,17 +12,18 @@ import java.util.LinkedHashMap;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 
 import org.openqa.selenium.chrome.ChromeDriver;
-
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
@@ -45,6 +46,7 @@ import LeadScenario.ValidationRule;
 
 
 public class Lead_Scenario {
+
 	String driverPath = "D:\\chromedriver_win32\\chromedriver.exe";
 	WebDriver driver;
 	Login objLogin;
@@ -55,7 +57,7 @@ public class Lead_Scenario {
 	LeadStatus objLeadStatus;
 	LeadConversion objLeadConversion;
 	Creation objCreation;
-	
+
 
 	Map<String, Object[]> LeadResults;
 
@@ -67,12 +69,14 @@ public class Lead_Scenario {
 
 	@BeforeTest
 	public void setup() {
-
+		System.setProperty("webdriver.chrome.silentOutput","true");
 		System.setProperty("webdriver.chrome.driver","C:\\chromedriver_win32 (4)\\chromedriver.exe");
 		driver = new ChromeDriver();
+		ChromeOptions options = new ChromeOptions();
 		driver.manage().window().maximize();
-		driver.get("https://login.salesforce.com/");	
-
+		options.addArguments("--start-maximized"); 
+		options.addArguments("--disable-notifications");
+		driver.get("https://login.salesforce.com/");
 	}
 	@Test(priority = 0)
 	public void Login_Salesforce_page() {
@@ -94,13 +98,13 @@ public class Lead_Scenario {
 			// TODO Auto-generated catch block
 			LeadResults.put("2",
 					new Object[] { "1","1.1",  "Lead - Check required fields in Lead - Last Name & Company","Pass" });
-		
+
 
 		} catch (Exception e) {
 
 			LeadResults.put("2",
 					new Object[] { "1","1.1",  "Lead - Check required fields in Lead - Last Name & Company","Fail" });
-			
+
 			Assert.assertTrue(false);
 
 		}
@@ -113,13 +117,13 @@ public class Lead_Scenario {
 
 			LeadResults.put("3",
 					new Object[] { "2","1.2",  "Lead - Validation Rule - Annual Revenue field should be filled","Pass" });
-			
+
 
 		} catch (Exception e) {
 
 			LeadResults.put("3",
 					new Object[] { "2","1.2",  "Lead - Validation Rule - Annual Revenue field should be filled","Fail" });
-			
+
 			Assert.assertTrue(false);
 
 		}
@@ -132,13 +136,13 @@ public class Lead_Scenario {
 
 			LeadResults.put("4",
 					new Object[] { "3","1.3",  "Lead - Validation Rule - Annual Revenue has filled","Pass" });
-			
+
 
 		} catch (Exception e) {
 
 			LeadResults.put("4",
 					new Object[] {"3","1.3",  "Lead - Validation Rule - Annual Revenue has filled","Fail" });
-		
+
 			Assert.assertTrue(false);
 
 		}
@@ -151,13 +155,13 @@ public class Lead_Scenario {
 			objLeadStatus.LeadStatusreport();
 			LeadResults.put("5",
 					new Object[] { "4","1.4",  "Lead Status should be changed to Qualified Lead","Pass" });
-			
+
 
 		} catch (Exception e) {
 
 			LeadResults.put("5",
 					new Object[] {"4","1.4",  "Lead Status should be changed to Qualified Lead","Fail" });
-			
+
 			Assert.assertTrue(false);
 
 		}
@@ -169,13 +173,13 @@ public class Lead_Scenario {
 			objLeadConversion.gotoConversion();
 			LeadResults.put("6",
 					new Object[] { "5","1.5",  "Check Lead Conversion","Pass" });
-		
+
 
 		} catch (Exception e) {
 
 			LeadResults.put("6",
 					new Object[] {"5","1.5",  "Check Lead Conversion","Fail" });
-			
+
 			Assert.assertTrue(false);
 
 
@@ -191,13 +195,13 @@ public class Lead_Scenario {
 
 			LeadResults.put("7",
 					new Object[] { "6","1.6",  "Check Account/Opportunity Creation", "Pass" });
-			
+
 
 		} catch (Exception e) {
 
 			LeadResults.put("7",
 					new Object[] { "6","1.6",  "Check Account/Opportunity Creation","Fail" });
-		
+
 			Assert.assertTrue(false);
 
 		}
@@ -205,79 +209,79 @@ public class Lead_Scenario {
 
 	//To prepare report in Excel
 
-		@BeforeSuite(alwaysRun = true)
-		public void suiteSetUp() throws IOException {
-			String excelFilePath = "D://Output.xlsx";
+	@BeforeSuite(alwaysRun = true)
+	public void suiteSetUp() throws IOException {
+		String excelFilePath = "D://Output.xlsx";
 
-			FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
-			Workbook workbook = WorkbookFactory.create(inputStream);
+		FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
+		Workbook workbook = WorkbookFactory.create(inputStream);
 
-			@SuppressWarnings("unused")
-			Sheet sheet = workbook.getSheetAt(0);
+		@SuppressWarnings("unused")
+		Sheet sheet = workbook.getSheetAt(0);
 
-			LeadResults = new LinkedHashMap<String, Object[]>();
-			// add test result excel file column header
-			// write the header in the first row
-			LeadResults.put("1", new Object[] {"Test Cases - Lead Object Scenario"});
-		}
-
-		//To save the results in Excel
-
-		@AfterClass
-		public void suiteTearDown() throws IOException {
-
-			String excelFilePath = "C:\\Users\\ranjith.raghavan\\Documents\\Scenario_Output.xlsx";
-			
-			FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
-			Workbook workbook = WorkbookFactory.create(inputStream);
-
-			Sheet sheet = workbook.getSheetAt(0);
-
-			Set<String> keyset = LeadResults.keySet();
-			int rownum = sheet.getLastRowNum();
-			for (String key : keyset) {
-				Row row = sheet.createRow(++rownum);
-				Object[] objArr = LeadResults.get(key);
-				int cellnum = 0;
-				for (Object obj : objArr) {
-					Cell cell = row.createCell(cellnum++);
-					if (obj instanceof Date)
-						cell.setCellValue((Date) obj);
-					else if (obj instanceof Boolean)
-						cell.setCellValue((Boolean) obj);
-					else if (obj instanceof String)
-						cell.setCellValue((String) obj);
-					else if (obj instanceof Double)
-						cell.setCellValue((Double) obj);
-				}
-			}
-			try {
-				FileOutputStream out = new FileOutputStream(new File("C:\\\\Users\\\\ranjith.raghavan\\\\Documents\\\\Scenario_Output.xlsx"));
-				workbook.write(out);
-				out.close();
-	                 
-				System.out.println("Successfully saved Selenium WebDriver Leads result to Excel File!!!");
-				
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				System.out.println("Fail");
-			}
-          driver.close();
-		}
-
-		//To Calculate the Runtime of the Class
-		@AfterSuite 
-		public void TotalTime() throws InterruptedException {
-			Endtime = System.currentTimeMillis(); 
-			long totaltime = Endtime - Starttime;
-			System.out.println("Total time take = " + totaltime);
-			driver.close();			
-		}
-	     
+		LeadResults = new LinkedHashMap<String, Object[]>();
+		// add test result excel file column header
+		// write the header in the first row
+		LeadResults.put("1", new Object[] {"Test Cases - Lead Object Scenario"});
 	}
+
+	//To save the results in Excel
+
+	@AfterClass
+	public void suiteTearDown() throws IOException {
+
+		String excelFilePath = "C:\\Users\\ranjith.raghavan\\Documents\\Scenario_Output.xlsx";
+
+		FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
+		Workbook workbook = WorkbookFactory.create(inputStream);
+
+		Sheet sheet = workbook.getSheetAt(0);
+
+		Set<String> keyset = LeadResults.keySet();
+		int rownum = sheet.getLastRowNum();
+		for (String key : keyset) {
+			Row row = sheet.createRow(++rownum);
+			Object[] objArr = LeadResults.get(key);
+			int cellnum = 0;
+			for (Object obj : objArr) {
+				Cell cell = row.createCell(cellnum++);
+				if (obj instanceof Date)
+					cell.setCellValue((Date) obj);
+				else if (obj instanceof Boolean)
+					cell.setCellValue((Boolean) obj);
+				else if (obj instanceof String)
+					cell.setCellValue((String) obj);
+				else if (obj instanceof Double)
+					cell.setCellValue((Double) obj);
+			}
+		}
+		try {
+			FileOutputStream out = new FileOutputStream(new File("C:\\\\Users\\\\ranjith.raghavan\\\\Documents\\\\Scenario_Output.xlsx"));
+			workbook.write(out);
+			out.close();
+
+			System.out.println("Successfully saved Selenium WebDriver Leads result to Excel File!!!");
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Fail");
+		}
+		driver.close();
+	}
+
+	//To Calculate the Runtime of the Class
+	@AfterSuite 
+	public void TotalTime() throws InterruptedException {
+		Endtime = System.currentTimeMillis(); 
+		long totaltime = Endtime - Starttime;
+		System.out.println("Total time take = " + totaltime);
+			
+	}
+
+}
 
 

@@ -2,12 +2,19 @@ package Login;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
-
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+
 
 
 
@@ -27,17 +34,15 @@ public class Navigation {
 	}
 
 	public void allownotification () throws AWTException, Exception {
-		Thread.sleep(10000);
-		Robot robot = new Robot();
-		robot.keyPress(KeyEvent.VK_TAB);
-		robot.keyRelease(KeyEvent.VK_TAB);
-		robot.keyPress(KeyEvent.VK_TAB);
-		robot.keyRelease(KeyEvent.VK_TAB);
-		robot.keyPress(KeyEvent.VK_ENTER);
-		robot.keyRelease(KeyEvent.VK_ENTER);
-
-	}
-
+		Thread.sleep(5000);
+    	Robot robot = new Robot(); 
+	  robot.keyPress(KeyEvent.VK_TAB);
+	  robot.keyRelease(KeyEvent.VK_TAB); 
+	  robot.keyPress(KeyEvent.VK_TAB);
+	  robot.keyRelease(KeyEvent.VK_TAB); 
+	  robot.keyPress(KeyEvent.VK_ENTER);
+	  robot.keyRelease(KeyEvent.VK_ENTER);
+	 }
 	public void clickwaffleSF() {
 		// TODO Auto-generated method stub
 		WebDriverWait wait = new WebDriverWait(driver, 5);

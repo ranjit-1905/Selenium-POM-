@@ -68,12 +68,14 @@ public class Opportunity_Scenario {
 	@BeforeTest
 	public void setup() {
 
+		System.setProperty("webdriver.chrome.silentOutput","true");
 		System.setProperty("webdriver.chrome.driver","C:\\chromedriver_win32 (4)\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.get("https://login.salesforce.com/");	
 
 	}
+	
 	@Test(priority = 0)
 	public void Login_Salesforce_page() {
 		// Create Login Page object
@@ -104,7 +106,7 @@ public class Opportunity_Scenario {
 			Assert.assertTrue(false);
 		}
 	}
-	@Test (priority = 3 )//,enabled=false)
+	@Test (priority = 3)//,enabled=false)
 	public void Opportunity_Date_Field_Type() {
 
 		objDataType = new DataType(driver); 
@@ -301,7 +303,7 @@ public class Opportunity_Scenario {
 	public void suiteTearDown() throws IOException {
 
 		String excelFilePath = "C:\\Users\\ranjith.raghavan\\Documents\\Scenario_Output.xlsx";
-
+				
 		FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
 		Workbook workbook = WorkbookFactory.create(inputStream);
 
@@ -351,7 +353,7 @@ public class Opportunity_Scenario {
 		Endtime = System.currentTimeMillis(); 
 		long totaltime = Endtime - Starttime;
 		System.out.println("Total time take = " + totaltime);
-		driver.close();		
+				
 
 	}
 }

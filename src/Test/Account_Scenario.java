@@ -63,7 +63,7 @@ public class Account_Scenario {
 
 	@BeforeTest
 	public void setup() {
-
+		System.setProperty("webdriver.chrome.silentOutput","true");
 		System.setProperty("webdriver.chrome.driver","C:\\chromedriver_win32 (4)\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
@@ -144,7 +144,7 @@ public class Account_Scenario {
 	public void Dependency_Filed( ) throws Exception {
 		objdependency=new dependency(driver);
 		try {
-			objdependency.dependency_picklist("Customer - Direct");
+			objdependency.dependency_picklist("Customer - Direct","Medium");
 		
 			AccountResults.put("5",
 					new Object[] { "2", "2.4",  "Check dependency picklist value in Account","Pass" });
@@ -187,8 +187,7 @@ public class Account_Scenario {
 
 		String excelFilePath = "C:\\Users\\ranjith.raghavan\\Documents\\Scenario_Output.xlsx";
 
-		//driver.quit();
-
+		
 		FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
 		Workbook workbook = WorkbookFactory.create(inputStream);
 
@@ -227,7 +226,7 @@ public class Account_Scenario {
 		} catch (Exception e) {
 			System.out.println("Fail");
 		}
-		 driver.close();
+		driver.close();
 	}
 	//To Calculate the Runtime of the Class
 	@AfterSuite 
@@ -235,7 +234,7 @@ public class Account_Scenario {
 		Endtime = System.currentTimeMillis();
 		long totaltime = Endtime - Starttime;
 		System.out.println("Total time take = " + totaltime);
-		driver.close();	
+		
 	}
 
 

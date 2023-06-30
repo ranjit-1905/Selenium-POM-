@@ -20,8 +20,10 @@ public class dependency {
 
      By Type = By.xpath("//button[@aria-label='Type, --None--']");
      By customerpriority=By.xpath("//lightning-base-combobox-item[@data-value='Customer - Direct']");
-     By Customer=By.xpath("//button[@aria-label='Customer Priority, --None--']");
-     By CustomerPriorityclick=By.xpath("//button[@data-value='Medium']/@data-value"); 
+     By Typetext=By.xpath("//button[@data-value='Customer - Direct']//span");
+     By Customer=By.xpath("//button[@aria-label='Customer Priority, --None--']//span");
+     By CustomerPriority=By.xpath("//lightning-base-combobox-item[.='Medium']");
+     By CustomerPriorityclick=By.xpath("//button[@data-value='Medium']//span");   //("//button[@data-value='Medium']/@data-value"); 
      By Save = By.xpath("//button[@name='SaveEdit']");
 
      public dependency(WebDriver driver) {
@@ -47,7 +49,7 @@ Thread.sleep(2000);
 
 public void customertypetext() throws InterruptedException	{
 	Thread.sleep(2000);
-		List<WebElement> l = driver.findElements(customerpriority);
+		List<WebElement> l = driver.findElements(Typetext);
 	for (WebElement Selectfordependency : l) {
 		String strSelect1 = Selectfordependency.getText();
 		System.out.println("Type :" + strSelect1);
@@ -58,12 +60,17 @@ public void CustomerPriorityclick() throws InterruptedException	{
 	driver.findElement(Customer).click();
 	
 }	
+public void CustomerPriority() throws InterruptedException	{
+	Thread.sleep(2000);
+	driver.findElement(CustomerPriority).click();
+	}
+	
 public void Gettext() throws InterruptedException	{
 	Thread.sleep(2000);
 		List<WebElement> l = driver.findElements(CustomerPriorityclick);
 	for (WebElement Selectfordependency : l) {
 		String strSelect1 = Selectfordependency.getText();
-		System.out.println("Type :" + strSelect1);
+		System.out.println("CustomerPriority :" + strSelect1);
 	}
 	
 }	
@@ -73,7 +80,7 @@ public void SaveClick()	{
 	driver.findElement(Save).click();
 }	
 
-public void dependency_picklist(String strSelectfordependency) throws Exception {
+public void dependency_picklist(String strSelectfordependency,String strCustomerPriority ) throws Exception {
 
 	// Scroll Down
 	this.GotoSrolldown();
@@ -81,8 +88,12 @@ public void dependency_picklist(String strSelectfordependency) throws Exception 
 	this.typeofcustomer();
 	//type
 	this.customertypeClick();
+	//Customer text
+	this.customertypetext();
 	//Customer
 	this.CustomerPriorityclick();
+	//
+	this.CustomerPriority();
 	//get text
 	this.Gettext();
 	//cancel
